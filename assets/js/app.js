@@ -665,21 +665,6 @@ function getWeaknessQuestions(availableQuestions) {
 
 
 function nextQuestion() {
-    // 前の問題のボタンからフォーカスを完全に外す
-    const oldButtons = document.querySelectorAll('.choice-btn');
-    oldButtons.forEach(btn => {
-        btn.blur();
-        btn.classList.remove('correct', 'incorrect');
-        btn.style.transform = '';
-        btn.style.background = '';
-        btn.style.borderColor = '';
-    });
-    
-    // 現在フォーカスされている要素を強制的に外す
-    if (document.activeElement) {
-        document.activeElement.blur();
-    }
-    
     const question = selectQuestion();
     
     // 問題表示
@@ -698,22 +683,39 @@ function nextQuestion() {
         [choices[i], choices[j]] = [choices[j], choices[i]];
     }
     
-    // 選択肢ボタン生成
-    const choicesElement = document.getElementById('choices');
-    choicesElement.innerHTML = '';
+    // 選択肢エリアを完全に削除して再作成
+    const oldChoicesElement = document.getElementById('choices');
+    const newChoicesElement = document.createElement('div');
+    newChoicesElement.id = 'choices';
+    newChoicesElement.className = 'choices';
     
+    // 古い要素を新しい要素で置き換え
+    oldChoicesElement.parentNode.replaceChild(newChoicesElement, oldChoicesElement);
+    
+    // 念のため、body からフォーカスを外す
+    if (document.activeElement) {
+        document.activeElement.blur();
+    }
+    
+    // 新しいボタンを生成
     choices.forEach((choice, index) => {
         const button = document.createElement('button');
         button.className = 'choice-btn';
         button.textContent = choice.text;
+        button.type = 'button';  // type を明示的に指定
         button.onclick = () => answerQuestion(choice.isCorrect, index, question.id);
-        choicesElement.appendChild(button);
+        
+        // インラインスタイルで確実にリセット
+        button.style.cssText = 'transform: none !important;';
+        
+        newChoicesElement.appendChild(button);
     });
     
     // タイマー開始
     gameState.questionStartTime = Date.now();
     startTimer();
 }
+
 
 
 function startTimer() {

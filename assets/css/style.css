@@ -925,14 +925,14 @@ h3 {
 .choice-btn {
     width: 100%;
     padding: 14px 16px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid #e0e0e0 !important;
     border-radius: 10px;
-    background: white;
+    background: white !important;
     font-size: 15px;
     font-weight: 500;
     color: #333;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
     text-align: left;
     min-height: 52px;
     display: flex;
@@ -941,6 +941,11 @@ h3 {
     overflow: hidden;
     word-wrap: break-word;
     line-height: 1.4;
+    transform: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    outline: none !important;
 }
 
 .choice-btn::before {
@@ -955,9 +960,8 @@ h3 {
 }
 
 .choice-btn:hover:not(:disabled) {
-    background: #f8f9fa;
-    border-color: #667eea;
-    transform: translateX(5px);
+    background: #f8f9fa !important;
+    border-color: #667eea !important;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
 }
 
@@ -966,50 +970,50 @@ h3 {
 }
 
 .choice-btn:active:not(:disabled) {
-    transform: translateX(3px);
+    background: #f0f0f0 !important;
 }
 
-.choice-btn:focus {
-    outline: none;
-    transform: translateX(0) !important;
-}
-
-.choice-btn:active {
-    transform: translateX(0) !important;
-}
-
-/* フォーカス表示時のアクセシビリティ対応 */
-.choice-btn:focus-visible {
-    outline: 3px solid #667eea;
-    outline-offset: 2px;
-    transform: translateX(0) !important;
+/* 全てのフォーカス・アクティブ状態を強制リセット */
+.choice-btn:focus,
+.choice-btn:focus-visible,
+.choice-btn:focus-within,
+.choice-btn:active,
+.choice-btn:target {
+    outline: none !important;
+    border-color: #e0e0e0 !important;
+    background: white !important;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .choice-btn:disabled {
     cursor: not-allowed;
     opacity: 0.7;
+    transform: none !important;
+    background: white !important;
+    border-color: #e0e0e0 !important;
 }
 
 .choice-btn.correct {
-    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-    border-color: #28a745;
-    color: #155724;
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%) !important;
+    border-color: #28a745 !important;
+    color: #155724 !important;
     font-weight: 700;
     animation: correctPulse 0.5s ease-out;
-    transform: translateX(0) !important;  /* ← この行を追加 */
+    transform: none !important;
 }
 
 @keyframes correctPulse {
-    0%, 100% { transform: scale(1) translateX(0); }  /* ← translateX(0) を追加 */
-    50% { transform: scale(1.05) translateX(0); }  /* ← translateX(0) を追加 */
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
 .choice-btn.incorrect {
-    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-    border-color: #dc3545;
-    color: #721c24;
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%) !important;
+    border-color: #dc3545 !important;
+    color: #721c24 !important;
     animation: incorrectShake 0.5s ease-out;
-    transform: translateX(0) !important;  /* ← この行を追加（念のため） */
+    transform: none !important;
 }
 
 @keyframes incorrectShake {
@@ -1017,6 +1021,7 @@ h3 {
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
+
 
 
 /* 結果表示（○×） */
