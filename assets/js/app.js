@@ -665,6 +665,21 @@ function getWeaknessQuestions(availableQuestions) {
 
 
 function nextQuestion() {
+    // 前の問題のボタンからフォーカスを完全に外す
+    const oldButtons = document.querySelectorAll('.choice-btn');
+    oldButtons.forEach(btn => {
+        btn.blur();
+        btn.classList.remove('correct', 'incorrect');
+        btn.style.transform = '';
+        btn.style.background = '';
+        btn.style.borderColor = '';
+    });
+    
+    // 現在フォーカスされている要素を強制的に外す
+    if (document.activeElement) {
+        document.activeElement.blur();
+    }
+    
     const question = selectQuestion();
     
     // 問題表示
@@ -683,7 +698,7 @@ function nextQuestion() {
         [choices[i], choices[j]] = [choices[j], choices[i]];
     }
     
-        // 選択肢ボタン生成
+    // 選択肢ボタン生成
     const choicesElement = document.getElementById('choices');
     choicesElement.innerHTML = '';
     
@@ -692,20 +707,14 @@ function nextQuestion() {
         button.className = 'choice-btn';
         button.textContent = choice.text;
         button.onclick = () => answerQuestion(choice.isCorrect, index, question.id);
-        
-        // スタイルを明示的にリセット
-        button.style.transform = 'translateX(0)';
-        button.style.background = '';
-        button.style.borderColor = '';
-        
         choicesElement.appendChild(button);
     });
-
     
     // タイマー開始
     gameState.questionStartTime = Date.now();
     startTimer();
 }
+
 
 function startTimer() {
     stopTimer();
@@ -851,13 +860,17 @@ function showResultIcon(isCorrect) {
 function answerQuestion(isCorrect, choiceIndex, questionId) {
     stopTimer();
     
-    // ボタン無効化 & フォーカス解除 & スタイルリセット
+    // ボタン無効化 & フォーカス解除
     const buttons = document.querySelectorAll('.choice-btn');
     buttons.forEach(btn => {
         btn.disabled = true;
-        btn.blur();  // フォーカスを解除
-        btn.style.transform = 'translateX(0)';  // 位置をリセット
+        btn.blur();
     });
+    
+    // 現在フォーカスされている要素を強制的に外す
+    if (document.activeElement && document.activeElement.classList.contains('choice-btn')) {
+        document.activeElement.blur();
+    }
     
     // 問題統計を記録
     recordQuestionAnswer(questionId, isCorrect);
@@ -895,20 +908,20 @@ function answerQuestion(isCorrect, choiceIndex, questionId) {
         
         // ボス撃破チェック
         if (gameState.currentBoss.currentHp <= 0) {
-        setTimeout(() => {
-            stopTimer(); // タイマー停止
-            showBossDefeatedAnimation(); // 撃破演出
-        }, 800);
+            setTimeout(() => {
+                stopTimer();
+                showBossDefeatedAnimation();
+            }, 800);
         } else {
-        setTimeout(() => {
-            nextQuestion();
-        }, 800);
+            setTimeout(() => {
+                nextQuestion();
+            }, 800);
         }
 
     } else {
         // 不正解
         gameState.incorrectCount++;
-        gameState.combo = 0; // コンボリセット
+        gameState.combo = 0;
         
         buttons[choiceIndex].classList.add('incorrect');
         
@@ -928,6 +941,7 @@ function answerQuestion(isCorrect, choiceIndex, questionId) {
         }, 1000);
     }
 }
+
 
 function showBossDefeatedAnimation() {
     // 撃破演出のオーバーレイを作成
