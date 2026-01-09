@@ -683,38 +683,39 @@ function nextQuestion() {
         [choices[i], choices[j]] = [choices[j], choices[i]];
     }
     
-    // 選択肢エリアを完全に削除して再作成
-    const oldChoicesElement = document.getElementById('choices');
-    const newChoicesElement = document.createElement('div');
-    newChoicesElement.id = 'choices';
-    newChoicesElement.className = 'choices';
+    // 選択肢ボタン生成
+    const choicesElement = document.getElementById('choices');
+    choicesElement.innerHTML = '';
     
-    // 古い要素を新しい要素で置き換え
-    oldChoicesElement.parentNode.replaceChild(newChoicesElement, oldChoicesElement);
+    // ← ここから追加 ↓↓↓
     
-    // 念のため、body からフォーカスを外す
-    if (document.activeElement) {
-        document.activeElement.blur();
-    }
+    // hover を一時的に無効化（青くなる問題を解決）
+    choicesElement.classList.add('disable-hover');
     
-    // 新しいボタンを生成
+    // ← ここまで追加 ↑↑↑
+    
     choices.forEach((choice, index) => {
         const button = document.createElement('button');
         button.className = 'choice-btn';
         button.textContent = choice.text;
-        button.type = 'button';  // type を明示的に指定
         button.onclick = () => answerQuestion(choice.isCorrect, index, question.id);
-        
-        // インラインスタイルで確実にリセット
-        button.style.cssText = 'transform: none !important;';
-        
-        newChoicesElement.appendChild(button);
+        choicesElement.appendChild(button);
     });
+    
+    // ← ここから追加 ↓↓↓
+    
+    // 200ms 後に hover を有効化
+    setTimeout(() => {
+        choicesElement.classList.remove('disable-hover');
+    }, 200);
+    
+    // ← ここまで追加 ↑↑↑
     
     // タイマー開始
     gameState.questionStartTime = Date.now();
     startTimer();
 }
+
 
 
 
