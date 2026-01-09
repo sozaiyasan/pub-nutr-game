@@ -980,11 +980,12 @@ h3 {
     color: #155724;
     font-weight: 700;
     animation: correctPulse 0.5s ease-out;
+    transform: translateX(0) !important;  /* ← この行を追加 */
 }
 
 @keyframes correctPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
+    0%, 100% { transform: scale(1) translateX(0); }  /* ← translateX(0) を追加 */
+    50% { transform: scale(1.05) translateX(0); }  /* ← translateX(0) を追加 */
 }
 
 .choice-btn.incorrect {
@@ -992,6 +993,7 @@ h3 {
     border-color: #dc3545;
     color: #721c24;
     animation: incorrectShake 0.5s ease-out;
+    transform: translateX(0) !important;  /* ← この行を追加（念のため） */
 }
 
 @keyframes incorrectShake {
@@ -999,6 +1001,7 @@ h3 {
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
+
 
 /* 結果表示（○×） */
 .result-icon-overlay {
