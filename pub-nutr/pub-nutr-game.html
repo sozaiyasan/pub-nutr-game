@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>国試対策GAME - Public Nutrtion</title>
+    
+    <!-- CSS読み込み -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
+    <!-- NGワードリスト読み込み -->
+    <script src="assets/js/ng-words.js"></script>
+</head>
+<body>
+    <div class="game-container">
+
+<!-- スタート画面 -->
+<div id="startScreen" class="screen active">
+    <h1>国試対策 🎮 GAME<br>Public Nutrtion</h1>
+    
+    <!-- 自己ベスト表示 -->
+    <div id="bestTimeDisplay"></div>
+    
+    <div class="input-group">
+        <label for="playerName">プレイヤー名を入力</label>
+        <input type="text" id="playerName" placeholder="名前を入力してください" maxlength="10">
+    </div>
+    
+    <button class="btn btn-primary" onclick="startGame()">ゲームスタート</button>
+    <button class="btn btn-secondary" onclick="showWeakQuestions()">📊 苦手問題を復習 📊</button>
+    <button class="btn btn-tertiary" onclick="showRanking()">🏆 NUAS RANK 🏆</button>
+    
+    <!-- ルール説明（折りたたみ式） - 世界ランキングの下 -->
+    <div class="game-rules-collapsible">
+        <div class="rules-header" onclick="toggleRules()">
+            <span>⚔️ ゲームルール</span>
+            <span class="toggle-icon" id="rulesToggleIcon">▼</span>
+        </div>
+        <div class="rules-content" id="rulesContent">
+            <!-- 挑戦メッセージをルールの冒頭に配置 -->
+            <div class="challenge-message-inline">
+                <p>⚡ 最速クリアを目指せ！</p>
+                <p>🏆 ランキングトップを狙おう！</p>
+            </div>
+            
+            <div class="rule-item">
+                <span class="rule-icon">⚡</span>
+                <span class="rule-text"><strong>速答ボーナス</strong><br>3秒以内の正解で +1ダメージ！</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">🔥</span>
+                <span class="rule-text"><strong>コンボボーナス</strong><br>連続正解でダメージ増加！<br>（3連続: 2, 5連続: 3）</span>
+            </div>
+            <div class="rule-item">
+                <span class="rule-icon">💀</span>
+                <span class="rule-text"><strong>ラスボス</strong><br>あなたの苦手問題を出題！</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+        <!-- ゲーム画面 -->
+        <div id="gameScreen" class="screen">
+            <div class="game-header">
+                <div class="stage-info">
+                    STAGE <span id="currentStage">1</span>/<span id="totalStages">3</span>
+                </div>
+                <div class="timer" id="timer">0.0秒</div>
+            </div>
+
+            <div class="boss-area">
+                <div class="boss-name" id="bossName">ボス名</div>
+                
+                <!-- ボス画像 -->
+                <img id="bossImage" class="boss-image" src="assets/img/boss01.png" alt="ボス">
+
+                <!-- HPバー（ボス画像の下） -->
+                <div class="boss-hp">
+                    <div class="hp-bar">
+                        <div class="hp-bar-fill" id="bossHpBar" style="width: 100%;"></div>
+                    </div>
+                    <div class="hp-text" id="bossHpText">
+                        <span class="hp-label">残りHP:</span>
+                        <span class="hp-value">8</span>
+                        <span class="hp-questions">（約8問）</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-area">
+                <div class="question-text" id="questionText">問題文がここに表示されます</div>
+                <div class="choices" id="choices">
+                    <!-- 選択肢が動的に生成されます -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 結果画面 -->
+        <div id="resultScreen" class="screen">
+            <div id="resultContent"></div>
+            
+            <h3 style="margin-top: 30px; color: #667eea;">🏆 NUAS RANK TOP30</h3>
+            <div class="ranking-list" id="resultRankingList"></div>
+            
+            <button class="btn btn-back" onclick="backToStart()">スタート画面に戻る</button>
+        </div>
+
+        <!-- ランキング画面 -->
+        <div id="rankingScreen" class="screen">
+            <h2>🏆 NUAS RANK</h2>
+            <div class="ranking-list" id="rankingList"></div>
+            <button class="btn btn-back" onclick="backToStart()">戻る</button>
+        </div>
+
+        <!-- 苦手問題画面 -->
+        <div id="weakQuestionsScreen" class="screen">
+            <h2>📊 苦手問題復習</h2>
+            <div id="weakQuestionsList"></div>
+            <button class="btn btn-tertiary" onclick="resetQuestionStats()">統計をリセット</button>
+            <button class="btn btn-back" onclick="backToStart()">戻る</button>
+        </div>
+    </div>
+
+    <!-- ゲームロジック -->
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
