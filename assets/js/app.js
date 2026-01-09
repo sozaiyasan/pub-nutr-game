@@ -1078,3 +1078,34 @@ document.addEventListener('DOMContentLoaded', () => {
     loadQuestionsFromCSV();
     displayBestTimeOnStart();
 });
+
+// ==========================================
+// ビューポート高さ調整（iOS Chrome 対応）
+// ==========================================
+
+function setViewportHeight() {
+    // 実際のビューポート高さを取得
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+    
+    console.log('📱 ビューポート高さ設定:', window.innerHeight + 'px');
+}
+
+// 初回実行
+setViewportHeight();
+
+// リサイズ時・画面回転時に再計算
+window.addEventListener('resize', setViewportHeight);
+window.addEventListener('orientationchange', setViewportHeight);
+
+// iOS Safari のアドレスバー表示/非表示時に再計算
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            setViewportHeight();
+            ticking = false;
+        });
+        ticking = true;
+    }
+});
