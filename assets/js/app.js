@@ -683,7 +683,7 @@ function nextQuestion() {
         [choices[i], choices[j]] = [choices[j], choices[i]];
     }
     
-    // 選択肢ボタン生成
+        // 選択肢ボタン生成
     const choicesElement = document.getElementById('choices');
     choicesElement.innerHTML = '';
     
@@ -692,8 +692,15 @@ function nextQuestion() {
         button.className = 'choice-btn';
         button.textContent = choice.text;
         button.onclick = () => answerQuestion(choice.isCorrect, index, question.id);
+        
+        // スタイルを明示的にリセット
+        button.style.transform = 'translateX(0)';
+        button.style.background = '';
+        button.style.borderColor = '';
+        
         choicesElement.appendChild(button);
     });
+
     
     // タイマー開始
     gameState.questionStartTime = Date.now();
@@ -844,9 +851,13 @@ function showResultIcon(isCorrect) {
 function answerQuestion(isCorrect, choiceIndex, questionId) {
     stopTimer();
     
-    // ボタン無効化
+    // ボタン無効化 & フォーカス解除 & スタイルリセット
     const buttons = document.querySelectorAll('.choice-btn');
-    buttons.forEach(btn => btn.disabled = true);
+    buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.blur();  // フォーカスを解除
+        btn.style.transform = 'translateX(0)';  // 位置をリセット
+    });
     
     // 問題統計を記録
     recordQuestionAnswer(questionId, isCorrect);
