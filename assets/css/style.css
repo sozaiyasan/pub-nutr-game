@@ -14,12 +14,14 @@ body {
     font-family: 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'ヒラギノ角ゴ ProN W3', Meiryo, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
+    min-height: 100dvh;  /* ← この行を追加（iOS Safari 対応） */
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px;
     overflow-x: hidden;
 }
+
 
 /* ゲームコンテナ */
 .game-container {
@@ -29,6 +31,7 @@ body {
     width: 100%;
     max-width: 450px;
     max-height: 95vh;
+    max-height: 95dvh;  /* ← この行を追加（iOS Safari 対応） */
     overflow-y: auto;
     padding: 25px 20px;
     position: relative;
