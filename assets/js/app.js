@@ -687,13 +687,6 @@ function nextQuestion() {
     const choicesElement = document.getElementById('choices');
     choicesElement.innerHTML = '';
     
-    // ← ここから追加 ↓↓↓
-    
-    // hover を一時的に無効化（青くなる問題を解決）
-    choicesElement.classList.add('disable-hover');
-    
-    // ← ここまで追加 ↑↑↑
-    
     choices.forEach((choice, index) => {
         const button = document.createElement('button');
         button.className = 'choice-btn';
@@ -702,19 +695,11 @@ function nextQuestion() {
         choicesElement.appendChild(button);
     });
     
-    // ← ここから追加 ↓↓↓
-    
-    // 200ms 後に hover を有効化
-    setTimeout(() => {
-        choicesElement.classList.remove('disable-hover');
-    }, 200);
-    
-    // ← ここまで追加 ↑↑↑
-    
     // タイマー開始
     gameState.questionStartTime = Date.now();
     startTimer();
 }
+
 
 
 

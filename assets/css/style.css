@@ -948,49 +948,16 @@ h3 {
     outline: none !important;
 }
 
-.choice-btn::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0;
-    background: rgba(102, 126, 234, 0.1);
-    transition: width 0.3s;
-}
-
-.choice-btn:hover:not(:disabled) {
-    background: #f8f9fa !important;
-    border-color: #667eea !important;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-}
-
-/* hover 無効化クラス（問題切り替え時の青くなる問題を解決） */
-.choices.disable-hover .choice-btn:hover:not(:disabled) {
-    background: white !important;
-    border-color: #e0e0e0 !important;
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-.choices.disable-hover .choice-btn:hover:not(:disabled)::before {
-    width: 0 !important;
-}
-
-
-.choice-btn:hover:not(:disabled)::before {
-    width: 100%;
-}
-
+/* タップ時の視覚フィードバック */
 .choice-btn:active:not(:disabled) {
     background: #f0f0f0 !important;
+    transform: scale(0.98);
 }
 
-/* 全てのフォーカス・アクティブ状態を強制リセット */
+/* フォーカス状態を無効化 */
 .choice-btn:focus,
 .choice-btn:focus-visible,
 .choice-btn:focus-within,
-.choice-btn:active,
 .choice-btn:target {
     outline: none !important;
     border-color: #e0e0e0 !important;
@@ -1034,6 +1001,7 @@ h3 {
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
 }
+
 
 
 
